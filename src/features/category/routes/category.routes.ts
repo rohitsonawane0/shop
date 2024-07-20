@@ -17,5 +17,7 @@ categoryRoutes.post(
 )
 categoryRoutes.get('/list', categoryController.allCategory)
 categoryRoutes.get('/:id', validateId, categoryController.byIdCategory)
+categoryRoutes.patch('/:id', validateId, verifyUser, checkUserAutenticated, categoryController.updateCategory)
+categoryRoutes.delete('/:id', validateId, verifyUser, checkUserAutenticated, categoryController.deleteCategory)
 
 export default categoryRoutes

@@ -13,7 +13,7 @@ export const validateSchema = (schema: Schema) => {
       return res.status(HTTPS_STATUS.BAD_REQUEST).json({ message: formatJoiMessage(error) })
     }
     // req.dataToSave = all.value
-    console.log({ all })
+    // console.log({ all })
     next()
   }
 }

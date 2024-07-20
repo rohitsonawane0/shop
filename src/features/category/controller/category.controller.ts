@@ -19,6 +19,14 @@ class CategoryController {
       data: categoryCraeted
     })
   })
+  public updateCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const updatedCategory = await categoryService.update(Number(req.params.id), req.body)
+
+    res.status(HTTPS_STATUS.OK).json({
+      message: 'Category successfully updated',
+      data: updatedCategory
+    })
+  })
   public allCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const categoryCraeted = await categoryService.getCategoryAllCategories()
 
@@ -35,6 +43,16 @@ class CategoryController {
     res.status(HTTPS_STATUS.OK).json({
       message: 'Category successfully fetched',
       data: foundCategory
+    })
+  })
+  public deleteCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const foundCategory = await categoryService.deleteCategoryById(req.params.id)
+    if (!foundCategory) {
+      throw new NotFoundException('Category not found')
+    }
+    res.status(HTTPS_STATUS.OK).json({
+      message: 'Category successfully deleted',
+      data: {}
     })
   })
 }

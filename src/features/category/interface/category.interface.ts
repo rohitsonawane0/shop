@@ -10,3 +10,8 @@ export interface CategoryShow {
   createAt: Date
   updatedAt: Date
 }
+
+export interface UpdateCategory {
+  name?: string
+  icon?: string
+}
