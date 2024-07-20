@@ -7,7 +7,7 @@ class AuthService {
     const { email, password, firstName, lastName, avatar } = reqBody
     const hashedPassword = await bcrypt.hash(password, 11)
     const createdUser = await prisma.user.create({
-      data: { email, password: hashedPassword, firstName, lastName, avatar }
+      data: { email, password: hashedPassword, firstName, lastName, avatar, updatedAt: new Date() }
     })
     return createdUser
   }

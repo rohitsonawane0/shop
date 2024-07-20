@@ -13,6 +13,8 @@ model Category {
   icon      String
   status    Boolean @default(true)
   isDeleted Boolean @default(false)
+  createAt  DateTime  @default(now())
+  updatedAt DateTime
 }
 
 model User {
@@ -34,3 +36,5 @@ enum User_role {
   ADMIN
   MERCHANT
 }
+
+
