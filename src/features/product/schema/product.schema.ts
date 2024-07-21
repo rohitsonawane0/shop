@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { OrderBy, Sort } from '../interface/product.interface'
 
 export const createProductSchema = Joi.object({
   name: Joi.string().required().alphanum(),
@@ -18,5 +19,13 @@ export const updateProductSchema = Joi.object({
 })
 export const productPaginationSchema = Joi.object({
   page: Joi.string().pattern(/^\d+$/).message('page must be a number').optional(),
-  limit: Joi.string().pattern(/^\d+$/).message('limit must be a number').optional()
+  limit: Joi.string().pattern(/^\d+$/).message('limit must be a number').optional(),
+  orderBy: Joi.string()
+    .valid(...Object.values(OrderBy))
+    .optional(),
+  sort: Joi.string()
+    .valid(...Object.values(Sort))
+    .optional(),
+  filterBy: Joi.string().optional(),
+  filterValueParams: Joi.string().optional()
 })

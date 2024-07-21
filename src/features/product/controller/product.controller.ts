@@ -6,7 +6,7 @@ import { catchAsync } from '~/utils/utils'
 
 class ProductController {
   public addProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const productCreated = await prodcutService.create(req.body)
+    const productCreated = await prodcutService.create(req.body, req.currentUser)
     if (!productCreated) {
       throw new BadRequestException('Unable to create Product')
     }
@@ -16,10 +16,11 @@ class ProductController {
   })
 
   public listProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    // console.log(req.query)
     const productList = await prodcutService.list(req.query)
 
     res
-      .status(HTTPS_STATUS.CREATED)
+      .status(HTTPS_STATUS.OK)
       .json({ status: true, message: 'Product created successfully', count: productList.count, data: productList.list })
   })
 
@@ -34,13 +35,13 @@ class ProductController {
   public updateProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const updated = await prodcutService.update(Number(req.params.id), req.body)
 
-    res.status(HTTPS_STATUS.CREATED).json({ status: true, message: 'Product updated successfully', data: updated })
+    res.status(HTTPS_STATUS.OK).json({ status: true, message: 'Product updated successfully', data: updated })
   })
 
   public deleteProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const deleted = await prodcutService.delete(Number(req.params.id))
 
-    res.status(HTTPS_STATUS.CREATED).json({ status: true, message: 'Product deleted successfully' })
+    res.status(HTTPS_STATUS.OK).json({ status: true, message: 'Product deleted successfully' })
   })
 }
 

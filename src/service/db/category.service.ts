@@ -7,7 +7,7 @@ const categorySelect = {
   id: true,
   name: true,
   icon: true,
-  createAt: true,
+  createdAt: true,
   updatedAt: true
 }
 

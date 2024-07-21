@@ -5,7 +5,8 @@ import {
   UpdateProductInput,
   ShowProduct,
   ProductInput,
-  PaginationParams
+  PaginationParams,
+  OrderBy
 } from '~/features/product/interface/product.interface'
 
 const selectProduct = {
@@ -16,19 +17,31 @@ const selectProduct = {
   quantity: true,
   categoryId: true,
   mainImage: true,
-  createAt: true,
-  updatedAt: true
+  createdAt: true,
+  updatedAt: true,
+  merchantId: true
 }
 
 class ProdcutService {
-  public async create(reqBody: ProductInput): Promise<ShowProduct | null> {
+  public async create(reqBody: ProductInput, reqUser: UserPayload): Promise<ShowProduct | null> {
     const { name, longDescription, shortDescription, quantity, categoryId, mainImage } = reqBody
     const categoryFound = await categoryService.getCategoryById(categoryId)
     if (!categoryFound) {
       throw new NotFoundException('Category you are trying to add does not exist')
     }
+    const dataToSave = {
+      name,
+      longDescription,
+      shortDescription,
+      quantity,
+      categoryId,
+      mainImage,
+      updatedAt: new Date(),
+      merchantId: reqUser.id
+    }
+    console.log(dataToSave)
     const createdProduct = await prisma.product.create({
-      data: { name, longDescription, shortDescription, quantity, categoryId, mainImage, updatedAt: new Date() },
+      data: dataToSave,
       select: selectProduct
     })
     return createdProduct
@@ -81,15 +94,33 @@ class ProdcutService {
     return foundProduct ? true : false
   }
   public async list(query: PaginationParams) {
+    const where: any = { isDeleted: false }
     const page = Number(query?.page) || 1
     const limit = Number(query?.limit) || 10
     const skip = (page - 1) * limit
+    const orderBy = query?.orderBy || 'createdAt'
+    const sort = query?.sort || 'desc'
+    const filterBy = query?.filterBy || ''
+    const filterValueParams = query?.filterValueParams || ''
+    const [filterCondition, filterValue] = filterValueParams.split('.')
+    const orderByValue = {
+      [orderBy]: sort
+    }
 
+    const operations = ['lt', 'lte', 'gt', 'gte', 'equals']
+    operations.forEach((operation) => {
+      if (filterCondition == operation) {
+        where[filterBy] = {}
+        where[filterBy][filterCondition] = Number(filterValue)
+      }
+    })
+    console.log({ where })
     const list = await prisma.product.findMany({
-      where: { isDeleted: false },
+      where,
       select: selectProduct,
       skip: skip,
-      take: limit
+      take: limit,
+      orderBy: orderByValue
     })
     const count = await prisma.product.count({
       where: { isDeleted: false }

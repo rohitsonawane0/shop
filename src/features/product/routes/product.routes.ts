@@ -1,6 +1,12 @@
 import { Router } from 'express'
 
-import { checkUserAutenticated, verifyUser } from '~/globals/middlewares/auth.middleware'
+import {
+  authorize,
+  checkPermision,
+  checkPermissionForAminAndMerchant,
+  checkUserAutenticated,
+  verifyUser
+} from '~/globals/middlewares/auth.middleware'
 import { validateSchema } from '~/globals/middlewares/validate.middleware'
 
 import { validateId } from '~/globals/middlewares/validId.middleware'
@@ -15,25 +21,30 @@ productRoutes.post(
   validateSchema(createProductSchema),
   verifyUser,
   checkUserAutenticated,
+  checkPermissionForAminAndMerchant,
   productController.addProduct
 )
 productRoutes.get('/list', validateQuerySchema(productPaginationSchema), productController.listProduct)
-productRoutes.get(
-  '/:id',
-  validateId,
-  validateSchema(createProductSchema),
-  verifyUser,
-  checkUserAutenticated,
-  productController.byIdProduct
-)
+productRoutes.get('/:id', validateId, productController.byIdProduct)
 productRoutes.patch(
   '/:id',
+
   validateId,
   validateSchema(updateProductSchema),
   verifyUser,
   checkUserAutenticated,
+  checkPermissionForAminAndMerchant,
+  authorize,
   productController.updateProduct
 )
-productRoutes.delete('/:id', validateId, verifyUser, checkUserAutenticated, productController.deleteProduct)
+productRoutes.delete(
+  '/:id',
+  validateId,
+  verifyUser,
+  checkUserAutenticated,
+  checkPermissionForAminAndMerchant,
+  authorize,
+  productController.deleteProduct
+)
 
 export default productRoutes

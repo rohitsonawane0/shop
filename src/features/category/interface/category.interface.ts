@@ -7,7 +7,7 @@ export interface CategoryShow {
   id: number
   name: string
   icon: string
-  createAt: Date
+  createdAt: Date
   updatedAt: Date
 }
 

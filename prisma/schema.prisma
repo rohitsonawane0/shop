@@ -14,7 +14,7 @@ model Category {
   status    Boolean @default(true)
   products Product[]
   isDeleted Boolean @default(false)
-  createAt  DateTime  @default(now())
+  createdAt  DateTime  @default(now())
   updatedAt DateTime
 }
 
@@ -32,9 +32,10 @@ model User {
   lastName  String
   avatar    String
   role      User_role @default(USER)
+  products Product[]
   isActive  Boolean   @default(true)
   isDeleted Boolean   @default(false)
-  createAt  DateTime  @default(now())
+  createdAt  DateTime  @default(now())
   updatedAt DateTime
 }
 
@@ -47,9 +48,11 @@ model Product{
   quantity  Int @default(0)
   category    Category @relation(fields: [categoryId],references: [id])
   categoryId Int
+  merchant User? @relation(fields: [merchantId],references: [id])
+  merchantId Int?
   mainImage String
   isDeleted Boolean   @default(false)
-  createAt  DateTime  @default(now())
+  createdAt  DateTime  @default(now())
   updatedAt DateTime
 }
 
