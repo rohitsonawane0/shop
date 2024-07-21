@@ -6,7 +6,9 @@ import { catchAsync } from '~/utils/utils'
 
 class ProductController {
   public addProduct = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const productCreated = await prodcutService.create(req.body, req.currentUser)
+    const files: IFile[] = req.files
+
+    const productCreated = await prodcutService.create(req.body, req.currentUser, files)
     if (!productCreated) {
       throw new BadRequestException('Unable to create Product')
     }

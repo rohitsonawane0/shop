@@ -6,8 +6,8 @@ export const createProductSchema = Joi.object({
   longDescription: Joi.string().required().min(100),
   shortDescription: Joi.string().required().max(255),
   quantity: Joi.number().required().positive(),
-  categoryId: Joi.number().required().positive(),
-  mainImage: Joi.string().required()
+  categoryId: Joi.number().required().positive()
+  // mainImage: Joi.string().required()
 })
 export const updateProductSchema = Joi.object({
   name: Joi.string().optional().alphanum(),

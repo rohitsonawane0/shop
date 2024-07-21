@@ -8,6 +8,7 @@ import {
   PaginationParams,
   OrderBy
 } from '~/features/product/interface/product.interface'
+import { fileUpload } from '~/globals/helper/fileUpload'
 
 const selectProduct = {
   id: true,
@@ -23,19 +24,28 @@ const selectProduct = {
 }
 
 class ProdcutService {
-  public async create(reqBody: ProductInput, reqUser: UserPayload): Promise<ShowProduct | null> {
+  public async create(reqBody: ProductInput, reqUser: UserPayload, image: IFile[]): Promise<ShowProduct | null> {
     const { name, longDescription, shortDescription, quantity, categoryId, mainImage } = reqBody
+    console.log({ image })
     const categoryFound = await categoryService.getCategoryById(categoryId)
     if (!categoryFound) {
       throw new NotFoundException('Category you are trying to add does not exist')
     }
+    console.log({ image })
+    const uploadImage = await fileUpload.uploadFile(image[0])
+    let newImage = mainImage
+    if (uploadImage) {
+      newImage = uploadImage
+    }
+    console.log(uploadImage)
+
     const dataToSave = {
       name,
       longDescription,
       shortDescription,
-      quantity,
-      categoryId,
-      mainImage,
+      quantity: Number(quantity),
+      categoryId: Number(categoryId),
+      mainImage: newImage,
       updatedAt: new Date(),
       merchantId: reqUser.id
     }

@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import appRoutes from './routes/app.route'
 import { CustomError, NotFoundException } from './globals/middlewares/error.middleware'
 import { HTTPS_STATUS } from './globals/contants/http'
+import multer from 'multer'
 dotenv.config()
 
 class Server {
@@ -21,9 +22,7 @@ class Server {
 
   public setupMiddleware(): void {
     this.app.use(express.json())
-    this.app.use(express.json())
-    this.app.use(express.json())
-    this.app.use(express.json())
+    this.app.use(multer().any())
   }
   public setupRoutes(): void {
     appRoutes(this.app)
