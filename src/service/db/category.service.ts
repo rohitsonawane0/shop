@@ -12,8 +12,8 @@ const categorySelect = {
 }
 
 class CategoryService {
-  public async addCategory(reqBody: any): Promise<Category> {
-    const { name, icon }: CategoryInput = reqBody
+  public async addCategory(reqBody: CategoryInput): Promise<Category> {
+    const { name, icon } = reqBody
     const categoryCreated = await prisma.category.create({ data: { name, icon, updatedAt: new Date() } })
     return categoryCreated
   }
@@ -47,7 +47,7 @@ class CategoryService {
     })
     return categoryCreated
   }
-  public async update(id: number, reqBody: any) {
+  public async update(id: number, reqBody: UpdateCategory) {
     const updateData: UpdateCategory = {}
     if (reqBody.name) {
       updateData.name = reqBody.name

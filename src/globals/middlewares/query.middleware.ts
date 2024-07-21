@@ -6,10 +6,10 @@ import { BadRequestException } from './error.middleware'
 const formatJoiMessage = (error: any) => {
   return error.details[0].message
 }
-export const validateSchema = (schema: Schema) => {
+export const validateQuerySchema = (schema: Schema) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const { error } = schema.validate(req.body)
-    const all = schema.validate(req.body)
+    const { error } = schema.validate(req.query)
+
     if (error) {
       throw new BadRequestException(formatJoiMessage(error))
     }

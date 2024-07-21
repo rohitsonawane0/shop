@@ -12,9 +12,16 @@ model Category {
   name      String
   icon      String
   status    Boolean @default(true)
+  products Product[]
   isDeleted Boolean @default(false)
   createAt  DateTime  @default(now())
   updatedAt DateTime
+}
+
+enum User_role {
+  USER
+  ADMIN
+  MERCHANT
 }
 
 model User {
@@ -31,10 +38,19 @@ model User {
   updatedAt DateTime
 }
 
-enum User_role {
-  USER
-  ADMIN
-  MERCHANT
+
+model Product{
+  id        Int       @id @default(autoincrement())
+  name     String
+  longDescription  String @db.Text
+  shortDescription String
+  quantity  Int @default(0)
+  category    Category @relation(fields: [categoryId],references: [id])
+  categoryId Int
+  mainImage String
+  isDeleted Boolean   @default(false)
+  createAt  DateTime  @default(now())
+  updatedAt DateTime
 }
 
 

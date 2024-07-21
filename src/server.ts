@@ -37,6 +37,7 @@ class Server {
       if (err instanceof CustomError) {
         return res.status(err.statusCode).json(err.getErrorResponse())
       }
+      console.log(err)
       return res.status(HTTPS_STATUS.INTERNAL_SERVER_ERROR).json({ status: 'error', message: 'Something went wrong' })
     })
   }

@@ -8,7 +8,7 @@ export function verifyUser(req: Request, res: Response, next: NextFunction) {
     throw new UnauthorizedException('Missing authorization')
   }
   const token = authorization.split(' ')[1]
-  console.log(token)
+  // console.log(token)
   try {
     const dec = jwt.verify(token, 'thisisjwt') as UserPayload
     req.currentUser = dec
