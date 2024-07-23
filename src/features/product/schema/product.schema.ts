@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { OrderBy, Sort } from '../interface/product.interface'
-
+//0
 export const createProductSchema = Joi.object({
   name: Joi.string().required().alphanum(),
   longDescription: Joi.string().required().min(100),
