@@ -15,6 +15,7 @@ export class FileUpload {
     this.client = client
     this.region = region
   }
+  //0
   public async uploadFile(file: IFile): Promise<string | null> {
     const fileKey = `${Date.now().toString()}-${file.originalname}`
     const contentType = 'image/jpeg'
