@@ -34,7 +34,5 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
-          # Install SSH client if not already available
-          sudo su
-
-          ls -a
+          npm install
+          working-directory: /home/ubuntu/app
