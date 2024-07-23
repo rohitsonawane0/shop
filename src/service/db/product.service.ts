@@ -22,6 +22,7 @@ const selectProduct = {
   updatedAt: true,
   merchantId: true
 }
+//0
 
 class ProdcutService {
   public async create(reqBody: ProductInput, reqUser: UserPayload, image: IFile[]): Promise<ShowProduct | null> {
