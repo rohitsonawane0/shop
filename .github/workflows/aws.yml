@@ -1,0 +1,55 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to EC2
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+      run: |
+        # Install SSH client if not already available
+        sudo apt-get install -y openssh-client
+
+        # Save the private key to a file
+        echo "$SSH_PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+
+        # Deploy the code
+        scp -i private_key.pem -o StrictHostKeyChecking=no -r . $EC2_USER@$EC2_HOST:/home/$EC2_USER/app
+
+        # Connect to the EC2 instance and restart the app
+        ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
+          cd /home/ubuntu/app
+          npm install
+          pm2 restart app || pm2 start app.js --name app
+        EOF
