@@ -35,19 +35,6 @@ jobs:
           EC2_HOST: ${{ secrets.EC2_HOST }}
         run: |
           # Install SSH client if not already available
-          sudo apt-get install -y openssh-client
+          sudo su
 
-          # Save the private key to a file
-          echo "$SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-
-          # Deploy the code
-          scp -v -i private_key.pem -o StrictHostKeyChecking=no -r * $EC2_USER@$EC2_HOST:/home/$EC2_USER/app
-
-
-          # Connect to the EC2 instance and restart the app
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
-            cd /home/ubuntu/app
-            npm install
-            pm2 restart app || pm2 start app.js --name app
-          EOF
+          ls -a
