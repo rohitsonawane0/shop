@@ -1,6 +1,6 @@
 import { ObjectCannedACL, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { AWS_ACCESS_KEYS, AWS_SECRET, AWS_BUCKET } from '~/config/config'
-//0
+//00
 export class FileUpload {
   client: S3Client
   region: string
