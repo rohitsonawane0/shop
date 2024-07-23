@@ -42,7 +42,8 @@ jobs:
           chmod 600 private_key.pem
 
           # Deploy the code
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r . $EC2_USER@$EC2_HOST:/home/$EC2_USER/app
+          scp -v -i private_key.pem -o StrictHostKeyChecking=no -r * $EC2_USER@$EC2_HOST:/home/$EC2_USER/app
+
 
           # Connect to the EC2 instance and restart the app
           ssh -i private_key.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST << 'EOF'
