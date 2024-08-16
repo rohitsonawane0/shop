@@ -32,13 +32,13 @@ class ProdcutService {
     if (!categoryFound) {
       throw new NotFoundException('Category you are trying to add does not exist')
     }
-    console.log({ image })
+    // console.log({ image })
     const uploadImage = await fileUpload.uploadFile(image[0])
     let newImage = mainImage
     if (uploadImage) {
       newImage = uploadImage
     }
-    console.log(uploadImage)
+    // console.log(uploadImage)
 
     const dataToSave = {
       name,
@@ -125,7 +125,7 @@ class ProdcutService {
         where[filterBy][filterCondition] = Number(filterValue)
       }
     })
-    console.log({ where })
+    // console.log({ where })
     const list = await prisma.product.findMany({
       where,
       select: selectProduct,
