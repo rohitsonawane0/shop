@@ -25,10 +25,17 @@ productRoutes.post(
   productController.addProduct
 )
 productRoutes.get('/list', validateQuerySchema(productPaginationSchema), productController.listProduct)
+productRoutes.get(
+  '/myProducts',
+  validateQuerySchema(productPaginationSchema),
+  verifyUser,
+  checkUserAutenticated,
+  checkPermissionForAminAndMerchant,
+  productController.getMyProducts
+)
 productRoutes.get('/:id', validateId, productController.byIdProduct)
 productRoutes.patch(
   '/:id',
-
   validateId,
   validateSchema(updateProductSchema),
   verifyUser,

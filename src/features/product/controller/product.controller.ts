@@ -45,6 +45,10 @@ class ProductController {
 
     res.status(HTTPS_STATUS.OK).json({ status: true, message: 'Product deleted successfully' })
   })
+  public getMyProducts = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const foundProducts = await prodcutService.listMyProducts(req.params, req.currentUser.id)
+    res.status(HTTPS_STATUS.OK).json({ status: true, message: 'Product fetched successfully', data: foundProducts })
+  })
 }
 
 export const productController = new ProductController()

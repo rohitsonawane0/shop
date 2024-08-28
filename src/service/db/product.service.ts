@@ -50,7 +50,7 @@ class ProdcutService {
       updatedAt: new Date(),
       merchantId: reqUser.id
     }
-    console.log(dataToSave)
+    // console.log(dataToSave)
     const createdProduct = await prisma.product.create({
       data: dataToSave,
       select: selectProduct
@@ -106,6 +106,40 @@ class ProdcutService {
   }
   public async list(query: PaginationParams) {
     const where: any = { isDeleted: false }
+    const page = Number(query?.page) || 1
+    const limit = Number(query?.limit) || 10
+    const skip = (page - 1) * limit
+    const orderBy = query?.orderBy || 'createdAt'
+    const sort = query?.sort || 'desc'
+    const filterBy = query?.filterBy || ''
+    const filterValueParams = query?.filterValueParams || ''
+    const [filterCondition, filterValue] = filterValueParams.split('.')
+    const orderByValue = {
+      [orderBy]: sort
+    }
+
+    const operations = ['lt', 'lte', 'gt', 'gte', 'equals']
+    operations.forEach((operation) => {
+      if (filterCondition == operation) {
+        where[filterBy] = {}
+        where[filterBy][filterCondition] = Number(filterValue)
+      }
+    })
+    // console.log({ where })
+    const list = await prisma.product.findMany({
+      where,
+      select: selectProduct,
+      skip: skip,
+      take: limit,
+      orderBy: orderByValue
+    })
+    const count = await prisma.product.count({
+      where: { isDeleted: false }
+    })
+    return { list, count }
+  }
+  public async listMyProducts(query: PaginationParams, merchantId: number) {
+    const where: any = { isDeleted: false, merchantId }
     const page = Number(query?.page) || 1
     const limit = Number(query?.limit) || 10
     const skip = (page - 1) * limit
